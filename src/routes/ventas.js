@@ -21,13 +21,12 @@ router.get('/ventas', (req, res) => {
 })
 
 //detalle venta
-router.get('/ventas/id=:id&productos=:p', (req, res) => {
-    const { id, p } = req.params
+router.get('/ventas/id=:id', (req, res) => {
+    const { id } = req.params
 
     veSchema
         .find({
-            _id: id,
-            productos: p
+            _id: id
         }).then((data) => res.json(data))
         .catch((error) => res.json({ message: error }))
 })

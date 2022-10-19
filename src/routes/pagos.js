@@ -12,13 +12,12 @@ router.get('/metodospagos', (req, res) => {
 })
 
 //detalle pagos
-router.get('/metodospagos/id=:id&tipo=:p', (req, res) => {
-    const { id, p } = req.params
+router.get('/metodospagos/id=:id', (req, res) => {
+    const { id } = req.params
 
     paSchema
         .find({
-            _id: id,
-            nombre: p
+            _id: id
         }).then((data) => res.json(data))
         .catch((error) => res.json({ message: error }))
 })

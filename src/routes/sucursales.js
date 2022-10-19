@@ -21,12 +21,11 @@ router.get('/sucursal', (req, res) => {
 })
 
 //actualizar usuario
-router.put('/sucursal/nombre=:n&codigo=:c', (req, res) => {
-    const { n, c } = req.params;
+router.put('/sucursal/codigo=:c', (req, res) => {
+    const { c } = req.params;
     const { nombre, telefono, direccion, status} = req.body
     suSchema
         .updateOne({
-            nombre: n,
             codigo: c
         }, { $set: { nombre, telefono, direccion, status } })
         .then((data) => res.json(data))

@@ -21,24 +21,22 @@ router.get('/productos', (req, res) => {
 })
 
 //buscar producto
-router.get('/productos/nombre=:n&sku=:s', (req, res) => {
-    const { n, s } = req.params
+router.get('/productos/sku=:s', (req, res) => {
+    const { s } = req.params
 
     prodSchema
         .find({
-            nombre: n,
             sku: s
         }).then((data) => res.json(data))
         .catch((error) => res.send("El producto no existe"))
 })
 
 //borrar producto
-router.delete('/productos/nombre=:n&sku=:s', (req, res) => {
-    const { n, s } = req.params
+router.delete('/productos/sku=:s', (req, res) => {
+    const { s } = req.params
 
     prodSchema
         .remove({
-            nombre: n,
             sku: s
         })
         .then((data) => res.json(data))
@@ -47,13 +45,12 @@ router.delete('/productos/nombre=:n&sku=:s', (req, res) => {
 
 //actualizar producto
 router.put('/productos/nombre=:n&sku=:s', (req, res) => {
-    const { n, s } = req.params
-    const { nombre, sku, stock, sucursal, precio, status } = req.body
+    const { s } = req.params
+    const { nombre, stock, sucursal, precio, status } = req.body
     prodSchema
         .updateOne({
-            nombre: n,
             sku: s
-        }, { $set: { nombre, sku, stock, sucursal, precio, status } })
+        }, { $set: { nombre, stock, sucursal, precio, status } })
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }))
 })

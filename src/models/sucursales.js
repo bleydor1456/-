@@ -1,31 +1,35 @@
-const mongoose = require('mongoose')
+const express = require('express')
+const suSchema = require('../models/sucursales')
 
-var x = Math.floor(Math.random() * 1000000000)
-const sucursales = mongoose.Schema({
-    nombre: {
-        type: String
-    },
-    codigo: {
-        type: Number,
-        default: x
-    },
-    telefono: {
-        type: Number
-    },
-    direccion: {
-        type: String
-    },
-    ubicacion: {
-        type: String
-    },
-    status: {
-        type: String
-    },
-    timesptamp: {
-        type: Date,
-        default: Date.now()
-    }
+const router = express.Router()
 
+//crear usuario
+router.post('/sucursal', (req, res) => {
+    const su = suSchema(req.body);
+    su
+        .save()
+        .then((data) => res.json(data))
+        .catch((data) => res.json({ message: error }))
 })
 
-module.exports = mongoose.model('sucursales', sucursales)
+//listado
+router.get('/sucursal', (req, res) => {
+    suSchema
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+//actualizar usuario
+router.put('/sucursal/codigo=:c', (req, res) => {
+    const { c } = req.params;
+    const { nombre, telefono, direccion, status} = req.body
+    suSchema
+        .updateOne({
+            codigo: c
+        }, { $set: { nombre, telefono, direccion, status } })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+module.exports = router

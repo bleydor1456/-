@@ -1,19 +1,38 @@
-const mongoose = require('mongoose')
+const express = require('express')
+const paSchema = require('../models/pagos')
 
-var x = Math.floor(Math.random() * 1000000000)
+const router = express.Router()
 
-const pagos = mongoose.Schema({
-    nombre: {
-        type: String
-    },
-    codigo: {
-        type: Number,
-        default: x
-    },
-    timesptamp: {
-        type: Date,
-        default: Date.now()
-    }
+//listado
+router.get('/metodospagos', (req, res) => {
+    paSchema
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
 })
 
-module.exports = mongoose.model('pagos', pagos)
+//detalle pagos
+router.get('/metodospagos/id=:id&tipo=:p', (req, res) => {
+    const { id, p } = req.params
+
+    paSchema
+        .find({
+            _id: id,
+            nombre: p
+        }).then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+//actualizar usuario
+router.put('/metodospago/id=:id', (req, res) => {
+    const { id } = req.params;
+    const { nombre } = req.body
+    paSchema
+        .updateOne({
+            _id: id
+        }, { $set: { nombre } })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+module.exports = router

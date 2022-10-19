@@ -1,28 +1,34 @@
-const mongoose = require('mongoose')
+const express = require('express')
+const veSchema = require('../models/ventas')
 
-var x = Math.floor(Math.random() * 1000000000)
-const ventas = mongoose.Schema({
-    productos: {
-        type: String
-    },
-    total: {
-        type: Number,
-        default: x
-    },
-    sucursal: {
-        type: String
-    },
-    usuario: {
-        type: String
-    },
-    metodo_pago: {
-        type: String
-    },
-    timesptamp: {
-        type: Date,
-        default: Date.now()
-    }
+const router = express.Router()
 
+//registrar venta
+router.post('/ventas', (req, res) => {
+    const venta = veSchema(req.body);
+    venta
+        .save()
+        .then((data) => res.json(data))
+        .catch((data) => res.json({ message: error }))
 })
 
-module.exports = mongoose.model('ventas', ventas)
+//listado
+router.get('/ventas', (req, res) => {
+    veSchema
+        .find()
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+//detalle venta
+router.get('/ventas/id=:id', (req, res) => {
+    const { id } = req.params
+
+    veSchema
+        .find({
+            _id: id
+        }).then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+module.exports = router
